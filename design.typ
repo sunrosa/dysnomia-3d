@@ -1,6 +1,6 @@
 #set par(justify: true)
-#set text(size: 13pt)
-#set page(paper: "a4", margin: 6.5%)
+#set text(size: 14pt)
+#set page(paper: "a4", margin: 5%)
 
 #columns(2, gutter: 3.5%)[
 = Design fixtures
@@ -12,4 +12,10 @@
 
 = Design considerations
 - The game should be turn-based to allow for deep calculations to take place without hurting user experience. An example of a live spaceship skirmishing game is Nebulous: Fleet Command. It suffers large performance hits even in relatively small games. And the simulation depth of Dysnomia 3D shall be far greater than Nebulous's.
+
+= Inspirations
+Dysnomia 3D is inspired by Cogmind's turn-based simulations as well as its modular part builds, combined with the nature of Aurora 4x, with combat similar to Nebulous: Fleet Command, with overarching lore from Dysnomia#footnote[Dysnomia is original work.], presented to the player in bits and pieces, as Cogmind does.
+
+= Game modes
+For Dysnomia's lore to be properly presented, singleplayer and multiplayer co-op shall be the available campaign modes. An intent is to also have a campaign mode with no built-in story, akin to 4x games, which would allow for multiplayer pvp and potentially singleplayer against AI. A focus shall be placed on adding a "skirmish" mode, where players create a battle and then fight it immediately (against AI or players).
 ]
