@@ -11,7 +11,8 @@ impl Plugin for ProjectilePlugin {
         app.register_type::<ProjectileType>()
             .register_type::<ExplosiveWarhead>()
             .register_type::<Warhead>()
-            .register_type::<Fuze>();
+            .register_type::<Fuze>()
+            .register_type::<ShotPellet>();
     }
 }
 
@@ -49,15 +50,29 @@ pub struct ExplosiveWarhead {
 
 #[derive(Debug, Clone, PartialEq, Reflect)]
 pub enum Warhead {
+    /// No warhead. The projectile is purely "dumb" kinetic penetrator, such as a bullet.
     None,
+    /// Something like [this](https://upload.wikimedia.org/wikipedia/commons/8/8a/CASATCoOrbital01.jpg)
     KineticFan,
-    Shot,
+    /// Many small projectiles deployed at terminal phase, like a shotgun
+    Shot {
+        shape: ShotPellet,
+        count: u32,
+    },
     Explosive(ExplosiveWarhead),
 }
 
+/// Types of fuzes used to trigger [`Warheads`](Warhead)
 #[derive(Debug, Clone, PartialEq, Reflect)]
 pub enum Fuze {
     Proximity,
     Contact,
     ContactDelay,
+}
+
+/// Pellet shapes/types used by [`Shot`](Warhead::Shot) [`Warheads`](Warhead)
+#[derive(Debug, Clone, PartialEq, Reflect)]
+pub enum ShotPellet {
+    Spherical,
+    Flechette,
 }
