@@ -1,12 +1,12 @@
 use bevy::prelude::*;
 
-use super::engine::Engine;
+use super::{armor::Armor, engine::Engine};
 
 pub struct MissilePlugin;
 impl Plugin for MissilePlugin {
     fn build(&self, app: &mut App) {
         app.register_type::<MissileType>()
-            .register_type::<MissileStage>()
+            .register_type::<Stage>()
             .register_type::<TerminalManeuver>();
     }
 }
@@ -14,18 +14,28 @@ impl Plugin for MissilePlugin {
 #[derive(Debug, Clone, PartialEq, Reflect)]
 pub struct MissileType {
     /// The first element represents the "largest" stage, that carries all following stages along with it. The next element represents the missile after first stage separation. The next element represents the missile after second stage separation. Etc.
-    stages: Vec<MissileStage>,
+    stages: Vec<Stage>,
+    final_stage: FinalStage,
 }
 
 #[derive(Debug, Clone, PartialEq, Reflect)]
-pub struct MissileStage {
+pub struct Stage {
+    /// The missile's main engine. Having no engine is optional because of the case of mines (that launch second stages with real engines when detecting a target) and sensor buoys.
+    engine: Option<Engine>,
+}
+
+#[derive(Debug, Clone, PartialEq, Reflect)]
+pub struct FinalStage {
     /// Payload mass in `kg`.
     payload_mass: f64,
 
     /// The missile's main engine. Having no engine is optional because of the case of mines (that launch second stages with real engines when detecting a target) and sensor buoys.
     main_engine: Option<Engine>,
 
-    /// The missile's engine to be used at final approach to increase the chance of success.
+    /// Physical armor to be placed on the surface of the missile
+    armor: Option<Armor>,
+
+    /// The missile's engine to be used for course corrections at final approach to increase the chance of success, and for [`terminal avoidance maneuvers`](TerminalManeuver) to increase point-defense avoidance chances.
     terminal_reaction_engine: Option<Engine>,
 
     /// Maneuver to initiate at [`terminal_maneuver_range`](Self::terminal_maneuver_range) away from the target. This will expend more fuel and slow the approach, however potentially reduce the chance of point-defense interception.
@@ -38,6 +48,7 @@ pub struct MissileStage {
     decelerate_to_terminal: bool,
 }
 
+/// At terminal approach, these maneuvers are used to increase point-defense avoidance chances.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Reflect)]
 pub enum TerminalManeuver {
     None,
