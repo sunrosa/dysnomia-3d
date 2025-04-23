@@ -1,13 +1,17 @@
+//! Bracketed, expensive simulations could be ran on the very first occurrence of an impact pair between a specific projectile and specific armor, and then every following impact between that same pair could cheaply base itself off the saved results of the expensive simulations.
+
 use bevy::prelude::*;
 
+use super::material::{ExplosiveMaterial, Material};
 use super::skin::Skin;
 
 pub struct ProjectilePlugin;
 impl Plugin for ProjectilePlugin {
     fn build(&self, app: &mut App) {
         app.register_type::<ProjectileType>()
-            .register_type::<Fuze>()
-            .register_type::<Warhead>();
+            .register_type::<ExplosiveWarhead>()
+            .register_type::<Warhead>()
+            .register_type::<Fuze>();
     }
 }
 
@@ -16,15 +20,15 @@ pub struct ProjectileType {
     /// Coatings, such as stealth paint
     skin: Option<Skin>,
 
-    /// Warhead trigger fuze
-    fuze: Option<Fuze>,
-
     /// Radius in `m`
     diameter: f64,
     /// Length in `m`
     length: f64,
     /// The material that the projectile/penetrator is made of
-    material: Material,
+    shell_material: Material,
+
+    /// The explosive warhead the projectile carries. If [`None`], the projectile is kinetic.
+    warhead: Warhead,
 
     /// If [`Some`], diameter of the projectile's sabot. If [`None`], the projectile has no sabot.
     sabot_diameter: Option<f64>,
@@ -34,21 +38,26 @@ pub struct ProjectileType {
 }
 
 #[derive(Debug, Clone, PartialEq, Reflect)]
-pub enum Fuze {
-    Proximity,
-    Contact,
-    ContactDelay,
+pub struct ExplosiveWarhead {
+    /// Warhead trigger fuze
+    pub fuze: Fuze,
+    /// Warhead material
+    pub warhead_material: ExplosiveMaterial,
+    /// Ratio between `0.0` and `1.0` that represents how much of the projectile is shell, and how much is warhead.
+    pub warhead_ratio: f32,
 }
 
 #[derive(Debug, Clone, PartialEq, Reflect)]
 pub enum Warhead {
-    DumbKinetic,
+    None,
     KineticFan,
-    Sabot,
-    Flechette,
     Shot,
-    HE,
-    HEAT,
-    HEIAP,
-    HESH,
+    Explosive(ExplosiveWarhead),
+}
+
+#[derive(Debug, Clone, PartialEq, Reflect)]
+pub enum Fuze {
+    Proximity,
+    Contact,
+    ContactDelay,
 }
