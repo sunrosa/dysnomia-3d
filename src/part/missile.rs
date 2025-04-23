@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use super::{armor::Armor, engine::Engine, skin::Skin};
+use super::{armor::ArmorLayers, engine::Engine, skin::Skin};
 
 pub struct MissilePlugin;
 impl Plugin for MissilePlugin {
@@ -25,7 +25,7 @@ pub struct Stage {
     engine: Option<Engine>,
 
     /// Physical armor to be placed on the surface of the missile
-    armor: Option<Armor>,
+    armor: Option<ArmorLayers>,
 
     /// Coatings such as stealth paint
     skin: Option<Skin>,
@@ -40,7 +40,7 @@ pub struct FinalStage {
     main_engine: Option<Engine>,
 
     /// Physical armor to be placed on the surface of the missile
-    armor: Option<Armor>,
+    armor: Option<ArmorLayers>,
 
     /// Coatings such as stealth paint
     skin: Option<Skin>,
