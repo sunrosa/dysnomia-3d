@@ -1,12 +1,13 @@
 use bevy::prelude::*;
 
-use super::{armor::Armor, engine::Engine};
+use super::{armor::Armor, engine::Engine, skin::Skin};
 
 pub struct MissilePlugin;
 impl Plugin for MissilePlugin {
     fn build(&self, app: &mut App) {
         app.register_type::<MissileType>()
             .register_type::<Stage>()
+            .register_type::<FinalStage>()
             .register_type::<TerminalManeuver>();
     }
 }
@@ -22,6 +23,12 @@ pub struct MissileType {
 pub struct Stage {
     /// The missile's main engine. Having no engine is optional because of the case of mines (that launch second stages with real engines when detecting a target) and sensor buoys.
     engine: Option<Engine>,
+
+    /// Physical armor to be placed on the surface of the missile
+    armor: Option<Armor>,
+
+    /// Coatings such as stealth paint
+    skin: Option<Skin>,
 }
 
 #[derive(Debug, Clone, PartialEq, Reflect)]
@@ -35,9 +42,11 @@ pub struct FinalStage {
     /// Physical armor to be placed on the surface of the missile
     armor: Option<Armor>,
 
+    /// Coatings such as stealth paint
+    skin: Option<Skin>,
+
     /// The missile's engine to be used for course corrections at final approach to increase the chance of success, and for [`terminal avoidance maneuvers`](TerminalManeuver) to increase point-defense avoidance chances.
     terminal_reaction_engine: Option<Engine>,
-
     /// Maneuver to initiate at [`terminal_maneuver_range`](Self::terminal_maneuver_range) away from the target. This will expend more fuel and slow the approach, however potentially reduce the chance of point-defense interception.
     terminal_maneuver: TerminalManeuver,
     /// Distance in `m` away from the target where [`terminal maneuvers`](Self::terminal_maneuver) shall be initiated, and shall continue indefinitely.
