@@ -4,4 +4,21 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-bevy = "0.15.3"
+bevy = { version = "0.15.3", features = ["dynamic_linking"] }
+log = { version = "*", features = ["release_max_level_warn"] }
+
+# Optimize libraries
+[profile.dev.package."*"]
+opt-level = 3
+
+# Slightly optimize this code
+[profile.dev]
+opt-level = 1
+
+# Aggressive optimizations
+[profile.release]
+lto = true
+opt-level = 3
+codegen-units = 1
+incremental = false
+debug = false

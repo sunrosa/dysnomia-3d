@@ -1,4 +1,6 @@
 //! Bracketed, expensive simulations could be ran on the very first occurrence of an impact pair between a specific projectile and specific armor, and then every following impact between that same pair could cheaply base itself off the saved results of the expensive simulations.
+//! # To add
+//! - [APCBC and friends](https://en.wikipedia.org/wiki/Armour-piercing,_capped,_ballistic_capped_shell) ([Video](https://www.youtube.com/watch?v=gTomWXvyrtg))
 
 use bevy::prelude::*;
 
