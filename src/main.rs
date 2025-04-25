@@ -1,5 +1,4 @@
-mod part;
-mod ship;
+mod custom;
 
 fn main() {
     println!("Hello, world!");
