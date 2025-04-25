@@ -26,6 +26,6 @@ impl ArmorLayers {
     fn verify(&self) -> bool {
         let sum = self.layers.iter().fold(0., |acc: f64, layer| acc + layer.0);
 
-        (1. - ARMOR_LAYER_TOLERANCE..=1. + ARMOR_LAYER_TOLERANCE).contains(&sum)
+        ((1. - ARMOR_LAYER_TOLERANCE)..=(1. + ARMOR_LAYER_TOLERANCE)).contains(&sum)
     }
 }
